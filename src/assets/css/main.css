@@ -1,0 +1,372 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+*{
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    scroll-behavior: smooth;
+    box-sizing: border-box;
+    scroll-padding-top: 2rem;
+}
+
+:root{
+    --main-color: #42d392;
+    --hover-color: #47c7a2;
+    --body-color: #1a1a1a;
+    --container-color: #2d2e37;
+    --text-color: #fcfeff;
+}
+
+html::-webkit-scrollbar{
+    width: 0.5rem;
+    background: transparent;
+}
+
+html::-webkit-scrollbar-thumb{
+    background: var(--main-color);
+}
+
+a{
+    text-decoration: none;
+}
+
+li{
+    list-style: none;
+}
+
+img{
+    width: 100%;
+}
+
+body{
+    background: var(--body-color);
+    color: var(--text-color);
+}
+
+.container{
+    max-width: 80rem;
+    margin: auto;
+    width: 100%;
+}
+
+section{
+    padding: 3rem 0 2rem;
+}
+
+header{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: var(--body-color);
+    z-index: 100;
+}
+
+/* Navbar */
+
+.nav{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 0;
+}
+
+/* Logo */
+
+.logo{
+    font-size: 1.4rem;
+    color: var(--text-color);
+    font-weight: 600;
+    text-transform: uppercase;
+    margin: 0 auto 0 0;
+}
+
+.logo span{
+    color: var(--main-color);
+}
+
+/* Search Box */
+
+.search-box{
+    max-width: 240px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    column-gap: 0.7rem;
+    padding: 8px 15px;
+    background-color: var(--container-color);
+    border-radius: 4rem;
+    margin-right: 1rem;
+}
+
+.bx{
+    cursor: pointer;
+}
+
+.search-box .bx {
+    color: var(--text-color);
+    font-size: 1.1rem;
+}
+
+.search-box .bx:hover {
+    color: var(--main-color);
+}
+
+#search-input{
+    width: 100%;
+    border: none;
+    outline: none;
+    color: var(--text-color);
+    background: transparent;
+    font-size: 0.938rem;
+}
+
+/* sidebar */
+
+.sidebar{
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 18px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 2.1rem;
+}
+
+.nav-link{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #b7b7b7;
+}
+
+.nav-link:hover,
+.nav-active{
+    color: var(--text-color);
+    transition: 0.3s all linear;
+    transform: scale(1.1);
+}
+
+.nav-link .bx{
+    font-size: 1.6rem;
+}
+
+.nav-link-title{
+    font-size: 0.7rem;
+}
+
+/* Hero */
+
+.hero{
+    position: relative;
+    min-height: 560px;
+    display: flex;
+    align-items: center;
+    margin-top: 5rem !important;
+    border-radius: 0.5rem;
+    background-color: rgba(30, 30, 42, 0.5);
+}
+
+.home-img{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    object-fit: cover;
+    border-radius: 0.5rem;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.home-text{
+    padding-left: 60px;
+}
+
+.home-text p{
+    font-size: 0.938rem;
+    margin: 10px 0 20px;
+    color: var(--main-color);
+    width: 70%;
+    font-weight: 500;
+    text-align: justify;
+    text-justify: inter-word;
+}
+
+.home-title{
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.watch-btn{
+    display: flex;
+    align-items: center;
+    column-gap: 0.8rem;
+    color: var(--text-color);
+}
+
+.animated{
+    animation: animate 2s linear infinite;
+}
+
+@keyframes animate{
+    0%{
+        box-shadow: 0 0 0 0 rgba(11, 110, 74, 0.7);
+    }
+    40%{
+        box-shadow: 0 0 0 50px rgba(18, 205, 139, 0);
+    }
+    80%{
+        box-shadow: 0 0 0 50px rgba(12, 141, 48, 0);
+    }
+    80%{
+        box-shadow: 0 0 0 rgba(24, 162, 40, 0);
+    }
+}
+
+
+
+.watch-btn .bx{
+    font-size: 21px;
+    background: var(--main-color);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.watch-btn .bx:hover{
+    background: var(--hover-color);
+}
+
+.watch-btn span{
+    font-size: 1rem;
+    font-weight: 400;
+}
+
+
+/* Popular Movies Section */
+
+.heading{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--container-color);
+    padding: 8px 14px;
+    border: 1px solid hsl(200 100% 99% / 5%);
+    margin-bottom: 2rem;;
+}
+
+.heading-title{
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.heading-title span{
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--main-color);
+}
+
+.movie-box{
+    position: relative;
+    width: 100%;
+    height: 380px;
+    overflow: hidden;
+}
+
+.movie-box-img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.movie-box .box-text{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 14px;
+    background: linear-gradient(8deg, hsl(240 17% 14% / 74%) 14%, hsl(240 17% 14% / 14%) 44%);
+    overflow: hidden;
+}
+
+.movie-title{
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.movie-date{
+    padding-bottom: 10px;
+    font-size: 0.938rem;
+}
+
+.play-btn{
+    position: absolute;
+    bottom: 0.8rem;
+    right: 0.8rem;
+}
+
+.play-btn .animate:hover{
+    animation: animate2 2s linear infinite;
+}
+
+@keyframes animate2{
+    0%{
+        box-shadow: 0 0 0 0 rgba(11, 110, 74, 0.7);
+    }
+    40%{
+        box-shadow: 0 0 0 50px rgba(18, 205, 139, 0);
+    }
+    80%{
+        box-shadow: 0 0 0 50px rgba(12, 141, 48, 0);
+    }
+    80%{
+        box-shadow: 0 0 0 rgba(24, 162, 40, 0);
+    }
+}
+
+/* Explore */
+.movie-content{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(247px, 1fr));
+    gap: 1.5rem;
+}
+
+.movie-content .movie-box:hover .movie-box-img{
+    transform: scale(1.1);
+    transition: 0.5s;
+}
+
+.next-page{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2.5rem;
+}
+
+.next-btn{
+    background: var(--main-color);
+    padding: 12px 20px;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.next-btn:hover{
+    background: var(--hover-color);
+    transition: 0.3s all linear;
+}
+
+/* Copyright */
+.copyright{
+    text-align: center;
+    padding: 20px;
+}
+
+.copyright a{
+    color: var(--text-color);
+}
