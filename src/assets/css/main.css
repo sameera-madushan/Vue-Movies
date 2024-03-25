@@ -50,7 +50,7 @@ body{
 }
 
 section{
-    padding: 3rem 0 2rem;
+    padding: 2rem 0 2rem;
 }
 
 header{
@@ -127,10 +127,11 @@ header{
     position: fixed;
     top: 50%;
     transform: translateY(-50%);
-    left: 18px;
+    left: 30px;
     display: flex;
     flex-direction: column;
     row-gap: 2.1rem;
+    z-index: 2;
 }
 
 .nav-link{
@@ -159,12 +160,18 @@ header{
 
 .hero{
     position: relative;
-    min-height: 560px;
+    min-height: 600px;
     display: flex;
     align-items: center;
     margin-top: 5rem !important;
     border-radius: 0.5rem;
     background-color: rgba(30, 30, 42, 0.5);
+}
+
+.slider-container {
+    width: 85%;
+    margin: auto;
+    z-index: 1;
 }
 
 .home-img{
@@ -408,6 +415,12 @@ header{
             z-index: 10;
         };
 
+        .slider-container {
+            width: 85%;
+            margin: auto;
+            z-index: 1;
+        }
+
         .nav-link .bx{
             font-size: 1.5rem;
         }
@@ -422,4 +435,14 @@ header{
         max-width: 190px;
         margin-left: 2rem;
     }
+
+    .slider-container {
+        width: 85%;
+        margin: auto;
+    }
+    .home-text p{
+        display: none;
+    }
 }
+
+

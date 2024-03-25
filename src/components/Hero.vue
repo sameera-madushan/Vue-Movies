@@ -25,30 +25,32 @@ onMounted(()=>{
 
 
 <template>
-    <swiper 
-        :slides-per-view="1" 
-        :space-between="10"
-        :modules="modules"
-        :autoplay="{
-            delay: 10000,
-            disableOnInteraction: false
-        }">
-        <swiper-slide v-for="movie in store.heroImages" :key="movie.id">
-            <section class="hero container" id="home">
-                <img :src="TMDB_IMAGE + movie.backdrop_path" :alt="movie.original_title" class="home-img">
-                <div class="home-text">
-                    <h1 class="home-title">
-                        {{ movie.original_title }}
-                    </h1>
-                    <p>{{ movie.overview }}</p>
-                    <a :href="STREAM_URL + '?video_id=' + movie.id + '&tmdb=1'" class="watch-btn" target="_blank">
-                        <i class='bx bx-right-arrow animated'></i>
-                        <span>WATCH NOW</span>
-                    </a>
-                </div>
-            </section>
-        </swiper-slide>
-    </swiper>
+    <div class="slider-container">
+        <swiper 
+            :slides-per-view="1" 
+            :space-between="10"
+            :modules="modules"
+            :autoplay="{
+                delay: 10000,
+                disableOnInteraction: false
+            }">
+            <swiper-slide v-for="movie in store.heroImages" :key="movie.id">
+                <section class="hero container" id="home">
+                    <img :src="TMDB_IMAGE + movie.backdrop_path" :alt="movie.original_title" class="home-img">
+                    <div class="home-text">
+                        <h1 class="home-title">
+                            {{ movie.original_title }}
+                        </h1>
+                        <p>{{ movie.overview }}</p>
+                        <a :href="STREAM_URL + '?video_id=' + movie.id + '&tmdb=1'" class="watch-btn" target="_blank">
+                            <i class='bx bx-right-arrow animated'></i>
+                            <span>WATCH NOW</span>
+                        </a>
+                    </div>
+                </section>
+            </swiper-slide>
+        </swiper>
+    </div>
 </template>
 
   
