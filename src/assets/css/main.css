@@ -370,3 +370,56 @@ header{
 .copyright a{
     color: var(--text-color);
 }
+
+/* Responsive */
+
+@media (max-width:1170px){
+        :root{
+            margin: 1rem;
+        }
+        .nav{
+            margin: 1rem;
+        }
+
+        .hero{
+            margin-top: 6rem !important;
+        }
+
+        .search-box{
+            margin-right: 2rem;
+        }
+
+        .movie-date{
+            padding-bottom: 50px;
+        }
+
+        .sidebar{
+            bottom: 0;
+            left: 0;
+            right: 0;
+            top: auto;
+            transform: translate(0);
+            flex-direction: row;
+            justify-content: space-evenly;
+            row-gap: 1px;
+            padding: 10px;
+            border-top: 1px solid hsl(200 100% 99% / 5%);
+            background: linear-gradient(8deg, var(--body-color), var(--container-color));
+            z-index: 10;
+        };
+
+        .nav-link .bx{
+            font-size: 1.5rem;
+        }
+
+        .copyright{
+            margin-bottom: 4rem;
+        }
+}
+
+@media(max-width:430px){
+    .search-box{
+        max-width: 190px;
+        margin-left: 2rem;
+    }
+}
