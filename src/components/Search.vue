@@ -2,6 +2,7 @@
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { useStore } from '@/store/store.js';
+import { watchEffect } from 'vue';
 
 const route = useRoute()
 const store = useStore();
@@ -10,15 +11,28 @@ const TMDB_SEARCH = import.meta.env.VITE_TMDB_SEARCH
 const TMDB_IMAGE = import.meta.env.VITE_TMDB_IMAGE
 const STREAM_URL = import.meta.env.VITE_STREAM_URL
 
-const params = {
-    language: 'en-US',
-    page: 1,
-    query: query,
-    include_adult: "false",
+const fetchSearch = (query) => {
+    const params = {
+        language: 'en-US',
+        page: 1,
+        query: query,
+        include_adult: false,
+    }
+    store.fetchSearches(params, TMDB_SEARCH);
 }
 
+watchEffect(() => {
+    const query = route.params.query;
+    if (query) {
+        fetchSearch(query);
+    }
+});
+
 onMounted(() => {
-    store.fetchSearches(params, TMDB_SEARCH)
+    const query = route.params.query;
+    if (query) {
+        fetchSearch(query);
+    }
 })
 
 </script>
