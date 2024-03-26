@@ -1,4 +1,4 @@
-# Vue Movies
+# [Vue Movies](https://vue-movies-eight.vercel.app)
 
 A Vue.js application for streaming movies online. It uses the TMDB API to fetch movie data and the SuperEmbed API for streaming. 
 
