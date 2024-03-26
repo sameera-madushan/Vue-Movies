@@ -1,14 +1,13 @@
-# movie-streaming-app
+# Vue Movies
 
-This template should help get you started developing with Vue 3 in Vite.
+A Vue.js application for streaming movies online. It uses the TMDB API to fetch movie data and the SuperEmbed API for streaming. 
 
-## Recommended IDE Setup
+![Vue-Movies](https://github.com/sameera-madushan/Vue-Movies/assets/55880211/4195afb8-3f93-42c2-b9eb-1263a448870f)
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## Features
 
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+- **Explore**: Browse through a vast collection of movies.
+- **Search**: Find your favorite movies with ease.
 
 ## Project Setup
 
