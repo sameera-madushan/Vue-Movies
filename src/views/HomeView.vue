@@ -4,7 +4,6 @@ import Sidebar from '@/components/Sidebar.vue';
 import Hero from '@/components/Hero.vue';
 import Popular from '@/components/Popular.vue';
 import Footer from '@/components/Footer.vue';
-import Upcomming from '@/components/Upcomming.vue';
 </script>
 
 <template>
@@ -12,6 +11,5 @@ import Upcomming from '@/components/Upcomming.vue';
     <Sidebar></Sidebar>
     <Hero></Hero>
     <Popular></Popular>
-    <Upcomming></Upcomming>
     <Footer></Footer>
 </template>

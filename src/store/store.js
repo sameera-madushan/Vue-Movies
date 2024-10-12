@@ -7,7 +7,6 @@ export const useStore = defineStore({
         heroImages: [],
         exploreMovies: [],
         searchMovies: [],
-        upcomingMovies: [],
     }),
     actions:{
         async fetchImages(params, url){
@@ -28,12 +27,6 @@ export const useStore = defineStore({
                 this.searchMovies = data.results;
             }
         },
-        async fetchUpcoming(params, url){
-            const data = await API_GET.fetchMovieDb(params, url);
-            if (data){
-                this.upcomingMovies = data.results;
-            }
-        }
     }
 })
 
