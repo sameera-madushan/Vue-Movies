@@ -149,26 +149,4 @@ const openModal = (movie) => {
     background-color: #bbb;
     cursor: not-allowed;
 }
-
-.spinner {
-    border: 8px solid #fff;
-    border-top: 8px solid #42d392;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    animation: spin 1s linear infinite;
-    margin: 0 auto;
-}
-
-.loader-container {
-    height: 500px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
 </style>

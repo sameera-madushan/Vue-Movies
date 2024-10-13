@@ -8,6 +8,7 @@ import Modal from '@/components/Modal.vue';
 const showModal = ref(false);
 const selectedMovie = ref(null);
 const videoUrl = ref('');
+const loading = ref(true);
 
 const store = useStore();
 const modules = [Autoplay];
@@ -22,9 +23,12 @@ const params = {
     page: randomNumber
 }
 
-onMounted(()=>{
-    store.fetchImages(params, TMDB_POPULAR);
-})
+onMounted(() => {
+    loading.value = true;
+    store.fetchImages(params, TMDB_POPULAR).finally(() => {
+        loading.value = false;
+    });
+});
 
 const openModal = (movie) => {
     selectedMovie.value = movie;
@@ -37,6 +41,11 @@ const openModal = (movie) => {
 
 <template>
     <div class="slider-container">
+
+        <div class="loader-container" v-if="loading">
+            <div class="spinner"></div>
+        </div>
+
         <swiper 
             :slides-per-view="1" 
             :space-between="10"
@@ -75,5 +84,3 @@ const openModal = (movie) => {
         ></iframe>
     </Modal>
 </template>
-
-  
