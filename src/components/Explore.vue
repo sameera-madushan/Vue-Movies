@@ -6,6 +6,7 @@ import Modal from '@/components/Modal.vue';
 const showModal = ref(false);
 const selectedMovie = ref(null);
 const videoUrl = ref('');
+const loading = ref(true);
 
 const store = useStore();
 const TMDB_EXPLORE = import.meta.env.VITE_TMDB_EXPLORE;
@@ -25,10 +26,14 @@ const fetchMovies = (pageNumber) => {
         sort_by: "popularity.desc"
     };
 
+    loading.value = true;
+
     store.fetchMovies(params, TMDB_EXPLORE).then(response => {
         totalPages.value = 100;
+    }).finally(() => {
+        loading.value = false;
     });
-}
+};
 
 onMounted(() => fetchMovies(page.value));
 
@@ -75,6 +80,9 @@ const openModal = (movie) => {
 <template>
     <section class="movies container" id="explore">
         <div class="movie-content">
+            <div class="loader-container"  v-if="loading">
+                <div class="spinner"></div>
+            </div>
             <div v-for="movie in store.exploreMovies" :key="movie.id" class="movie-box">
                 <img :src="TMDB_IMAGE + movie.poster_path" :alt="movie.original_title" class="movie-box-img">
                 <div class="box-text">
@@ -140,5 +148,27 @@ const openModal = (movie) => {
 .pagination button:disabled {
     background-color: #bbb;
     cursor: not-allowed;
+}
+
+.spinner {
+    border: 8px solid #fff;
+    border-top: 8px solid #42d392;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+}
+
+.loader-container {
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 </style>
