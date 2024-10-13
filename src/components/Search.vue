@@ -8,6 +8,7 @@ import Modal from '@/components/Modal.vue';
 const showModal = ref(false);
 const selectedMovie = ref(null);
 const videoUrl = ref('');
+const loading = ref(true);
 
 const route = useRoute()
 const store = useStore();
@@ -50,6 +51,9 @@ const openModal = (movie) => {
 <template>
     <section class="movies container" id="search">
         <div class="movie-content">
+            <div class="loader-container"  v-if="loading">
+                <div class="spinner"></div>
+            </div>
             <div v-for="movie in store.searchMovies" class="movie-box">
                 <img :src="TMDB_IMAGE + movie.poster_path" :alt="movie.original_title" class="movie-box-img">
                 <div class="box-text">
