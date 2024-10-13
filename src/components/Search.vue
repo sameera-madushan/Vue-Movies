@@ -3,6 +3,11 @@ import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { useStore } from '@/store/store.js';
 import { watchEffect } from 'vue';
+import Modal from '@/components/Modal.vue';
+
+const showModal = ref(false);
+const selectedMovie = ref(null);
+const videoUrl = ref('');
 
 const route = useRoute()
 const store = useStore();
@@ -35,6 +40,11 @@ onMounted(() => {
     }
 })
 
+const openModal = (movie) => {
+    selectedMovie.value = movie;
+    videoUrl.value = `${STREAM_URL}?video_id=${movie.id}&tmdb=1`;
+    showModal.value = true;
+};
 </script>
 
 <template>
@@ -45,11 +55,23 @@ onMounted(() => {
                 <div class="box-text">
                     <h2 class="movie-title">{{ movie.original_title }}</h2>
                     <span class="movie-date"></span>
-                    <a :href="STREAM_URL + '?video_id=' + movie.id + '&tmdb=1'" class="watch-btn play-btn" target="_blank">
+                    <a href="#" @click.prevent="openModal(movie)" class="watch-btn play-btn">
                         <i class='bx bx-right-arrow animate'></i>
                     </a>
                 </div>
             </div>
         </div>
     </section>
+
+    <Modal v-model="showModal" :videoUrl="videoUrl">
+        <iframe
+            v-if="videoUrl"
+            :src="videoUrl"
+            width="100%"
+            height="400"
+            frameborder="0"
+            allow="autoplay; encrypted-media"
+            allowfullscreen
+        ></iframe>
+    </Modal>
 </template>

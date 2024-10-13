@@ -210,6 +210,10 @@ header{
     color: var(--text-color);
 }
 
+.watch-btn .animate:hover{
+    animation: animate2 2s linear infinite;
+}
+
 .animated{
     animation: animate 2s linear infinite;
 }

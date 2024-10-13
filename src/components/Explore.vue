@@ -1,6 +1,11 @@
 <script setup>
 import { onMounted, ref, computed } from 'vue';
 import { useStore } from '@/store/store.js';
+import Modal from '@/components/Modal.vue';
+
+const showModal = ref(false);
+const selectedMovie = ref(null);
+const videoUrl = ref('');
 
 const store = useStore();
 const TMDB_EXPLORE = import.meta.env.VITE_TMDB_EXPLORE;
@@ -59,6 +64,12 @@ const goToPage = (pageNumber) => {
         fetchMovies(page.value);
     }
 };
+
+const openModal = (movie) => {
+    selectedMovie.value = movie;
+    videoUrl.value = `${STREAM_URL}?video_id=${movie.id}&tmdb=1`;
+    showModal.value = true;
+};
 </script>
 
 <template>
@@ -69,7 +80,7 @@ const goToPage = (pageNumber) => {
                 <div class="box-text">
                     <h2 class="movie-title">{{ movie.original_title }}</h2>
                     <span class="movie-date">{{ movie.release_date }}</span>
-                    <a :href="STREAM_URL + '?video_id=' + movie.id + '&tmdb=1'" class="watch-btn play-btn" target="_blank">
+                    <a href="#" @click.prevent="openModal(movie)" class="watch-btn play-btn">
                         <i class='bx bx-right-arrow animate'></i>
                     </a>
                 </div>
@@ -91,6 +102,18 @@ const goToPage = (pageNumber) => {
 
         <button @click="getNext" :disabled="page === totalPages">Next</button>
     </div>
+
+    <Modal v-model="showModal" :videoUrl="videoUrl">
+        <iframe
+            v-if="videoUrl"
+            :src="videoUrl"
+            width="100%"
+            height="400"
+            frameborder="0"
+            allow="autoplay; encrypted-media"
+            allowfullscreen
+        ></iframe>
+    </Modal>
 </template>
 
 <style>

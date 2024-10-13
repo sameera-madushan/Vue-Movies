@@ -3,6 +3,11 @@ import {onMounted, ref} from 'vue';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import { useStore } from '@/store/store.js';
 import { Autoplay } from 'swiper/modules';
+import Modal from '@/components/Modal.vue';
+
+const showModal = ref(false);
+const selectedMovie = ref(null);
+const videoUrl = ref('');
 
 const store = useStore();
 const modules = [Autoplay];
@@ -20,6 +25,12 @@ const params = {
 onMounted(()=>{
     store.fetchImages(params, TMDB_POPULAR);
 })
+
+const openModal = (movie) => {
+    selectedMovie.value = movie;
+    videoUrl.value = `${STREAM_URL}?video_id=${movie.id}&tmdb=1`;
+    showModal.value = true;
+};
 
 </script>
 
@@ -42,8 +53,8 @@ onMounted(()=>{
                             {{ movie.original_title }}
                         </h1>
                         <p>{{ movie.overview }}</p>
-                        <a :href="STREAM_URL + '?video_id=' + movie.id + '&tmdb=1'" class="watch-btn" target="_blank">
-                            <i class='bx bx-right-arrow animated'></i>
+                        <a href="#" @click.prevent="openModal(movie)" class="watch-btn">
+                            <i class='bx bx-right-arrow animate'></i>
                             <span>WATCH NOW</span>
                         </a>
                     </div>
@@ -51,6 +62,18 @@ onMounted(()=>{
             </swiper-slide>
         </swiper>
     </div>
+
+    <Modal v-model="showModal" :videoUrl="videoUrl">
+        <iframe
+            v-if="videoUrl"
+            :src="videoUrl"
+            width="100%"
+            height="400"
+            frameborder="0"
+            allow="autoplay; encrypted-media"
+            allowfullscreen
+        ></iframe>
+    </Modal>
 </template>
 
   
