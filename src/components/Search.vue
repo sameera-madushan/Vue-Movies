@@ -24,7 +24,12 @@ const fetchSearch = (query) => {
         query: query,
         include_adult: false,
     }
-    store.fetchSearches(params, TMDB_SEARCH);
+
+    loading.value = true;
+
+    store.fetchSearches(params, TMDB_SEARCH).finally(() => {
+        loading.value = false;
+    });
 }
 
 watchEffect(() => {
