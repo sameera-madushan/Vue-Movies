@@ -124,29 +124,29 @@ const openModal = (movie) => {
     </Modal>
 </template>
 
-<style>
-.pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-}
+<style scoped>
+    .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
 
-.pagination button {
-    margin: 0 5px;
-    padding: 10px 15px;
-    border: none;
-    background-color: #47c7a2;
-    cursor: pointer;
-    color: #000;
-}
+    .pagination button {
+        margin: 0 5px;
+        padding: 10px 15px;
+        border: none;
+        background-color: #47c7a2;
+        cursor: pointer;
+        color: #000;
+    }
 
-.pagination button.active {
-    background-color: #fff;
-    color: #000;
-}
+    .pagination button.active {
+        background-color: #fff;
+        color: #000;
+    }
 
-.pagination button:disabled {
-    background-color: #bbb;
-    cursor: not-allowed;
-}
+    .pagination button:disabled {
+        background-color: #bbb;
+        cursor: not-allowed;
+    }
 </style>
