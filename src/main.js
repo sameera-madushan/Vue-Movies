@@ -1,4 +1,5 @@
 import './assets/css/main.css'
+import 'swiper/css/navigation';
 import 'swiper/css';
 
 import { createApp } from 'vue'
