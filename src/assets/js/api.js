@@ -15,6 +15,17 @@ export const fetchMovieDb = async (params, url) => {
     }
 }
 
+export const fetchRaw = async (fullUrl) => {
+    try {
+        const response = await axios.get(fullUrl, {headers, params: { language: 'en-US' }});
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching raw data:', error);
+    }
+};
+
+
 export default {
     fetchMovieDb,
+    fetchRaw
 }
