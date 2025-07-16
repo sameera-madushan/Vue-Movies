@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useStore } from '@/store/store.js';
 import { watchEffect } from 'vue';
 import Modal from '@/components/Modal.vue';
@@ -11,6 +11,7 @@ const videoUrl = ref('');
 const loading = ref(true);
 
 const route = useRoute()
+const router = useRouter()
 const store = useStore();
 const query = route.params.query;
 const TMDB_SEARCH = import.meta.env.VITE_TMDB_SEARCH
@@ -46,10 +47,18 @@ onMounted(() => {
     }
 })
 
-const openModal = (movie) => {
-    selectedMovie.value = movie;
-    videoUrl.value = `${STREAM_URL}?video_id=${movie.id}&tmdb=1`;
-    showModal.value = true;
+const openModal = (media) => {
+    if (media.media_type === 'movie') {
+        selectedMovie.value = media;
+        videoUrl.value = `${STREAM_URL}?video_id=${media.id}&tmdb=1`;
+        showModal.value = true;
+    } else if (media.media_type === 'tv') {
+        goToSeries(media);
+    }
+};
+
+const goToSeries = (series) => {
+    router.push({ name: 'seriesdetails', params: { id: series.id } });
 };
 </script>
 
