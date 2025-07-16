@@ -2,12 +2,13 @@
 
 A Vue.js application for streaming movies online. It uses the TMDB API to fetch movie data and the SuperEmbed API for streaming. 
 
-![Vue-Movies](https://github.com/user-attachments/assets/dd4d6681-f426-46bf-a116-38f15e374f07)
+![Vue-Movies](https://github.com/user-attachments/assets/d2e66764-a217-458d-aa6a-122d193d5bf9)
 
 ## Features
 
-- **Explore**: Browse through a vast collection of movies.
-- **Search**: Find your favorite movies with ease.
+- **Movies**: Browse through a vast collection of movies.
+- **TV Series**: Explore popular and trending TV shows.
+- **Search**: Easily search for your favorite movies and TV series.
 
 ## Project Setup
 
