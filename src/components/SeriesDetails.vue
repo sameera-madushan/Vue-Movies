@@ -42,7 +42,7 @@ onMounted(fetchSeriesDetails);
   <section v-else class="hero container" id="home">
     <template v-if="store.seriesDetails">
       <img
-        :src="TMDB_IMAGE + store.seriesDetails.backdrop_path"
+        :src="TMDB_IMAGE + (store.seriesDetails.backdrop_path ?? store.seriesDetails.poster_path)"
         :alt="store.seriesDetails.name"
         class="home-img"
       />
