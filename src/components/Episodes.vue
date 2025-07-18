@@ -22,35 +22,52 @@ const showModal = ref(false);
 const selectedEpisode = ref(null);
 const videoUrl = ref('');
 const modules = [Autoplay, Navigation];
-
+const failedSeasons = ref(new Set());
+const maxRetries = 3; 
 const seasonEpisodes = ref({});
 
 const filteredSeasons = computed(() => {
   return props.seasons.filter(season => season?.season_number && season.season_number !== 0);
 });
 
-const fetchSeasonEpisodes = async (seasonNumber) => {
+const fetchSeasonEpisodes = async (seasonNumber, retryCount = 0) => {
   loadingSeasons.value.add(seasonNumber);
 
-  const url = `${TMDB_SERIES_DETAILS}/${props.seriesId}/season/${seasonNumber}`;
-  const data = await store.fetchSeasonEpisodes(url);
+  try {
+    const url = `${TMDB_SERIES_DETAILS}/${props.seriesId}/season/${seasonNumber}`;
+    const data = await store.fetchSeasonEpisodes(url);
 
-  if (data && data.episodes) {
-    seasonEpisodes.value[seasonNumber] = data.episodes;
+    if (data && data.episodes) {
+      seasonEpisodes.value[seasonNumber] = data.episodes;
+      failedSeasons.value.delete(seasonNumber);
+    } else {
+      throw new Error('No episodes data');
+    }
+  } catch (error) {
+    failedSeasons.value.add(seasonNumber);
+  } finally {
+    loadingSeasons.value.delete(seasonNumber);
   }
 
-  loadingSeasons.value.delete(seasonNumber);
+  if (failedSeasons.value.has(seasonNumber) && retryCount < maxRetries) {
+    await new Promise(resolve => setTimeout(resolve, 5000));
+    return fetchSeasonEpisodes(seasonNumber, retryCount + 1);
+  }
 };
+
 
 const fetchAllSeasonEpisodes = async () => {
   loading.value = true;
 
-  for (const season of filteredSeasons.value) {
-    fetchSeasonEpisodes(season.season_number);
-  }
+  const fetchPromises = filteredSeasons.value.map(season =>
+    fetchSeasonEpisodes(season.season_number)
+  );
 
-  loading.value = false; 
+  await Promise.all(fetchPromises);
+
+  loading.value = false;
 };
+
 
 const getEpisodeImage = (episode) => {
   if (episode.still_path) {
