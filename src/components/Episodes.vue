@@ -1,5 +1,6 @@
 <script setup>
-import { onMounted, ref, computed } from 'vue';
+import { ref, computed } from 'vue';
+import { toast } from 'vue3-toastify';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import { Autoplay, Navigation } from 'swiper/modules';
 import { useStore } from '@/store/store.js';
@@ -11,95 +12,105 @@ const props = defineProps({
 });
 
 const store = useStore();
-const loading = ref(true);
+
 const loadingSeasons = ref(new Set());
+const expandedSeasons = ref(new Set());
+const failedSeasons = ref(new Set());
+const selectedEpisode = ref(null);
+const showModal = ref(false);
 
 const TMDB_IMAGE = import.meta.env.VITE_TMDB_IMAGE;
 const STREAM_URL = import.meta.env.VITE_STREAM_URL;
 const TMDB_SERIES_DETAILS = import.meta.env.VITE_TMDB_SERIES_DETAILS;
 
-const showModal = ref(false);
-const selectedEpisode = ref(null);
-const videoUrl = ref('');
 const modules = [Autoplay, Navigation];
-const failedSeasons = ref(new Set());
-const maxRetries = 3; 
-const seasonEpisodes = ref({});
 
-const filteredSeasons = computed(() => {
-  return props.seasons.filter(season => season?.season_number && season.season_number !== 0);
+const seasonEpisodes = computed(() => store.seasonEpisodes);
+
+const videoUrl = computed(() => {
+  const ep = selectedEpisode.value;
+  if (!ep) return '';
+  return `${STREAM_URL}?video_id=${props.seriesId}&tmdb=1&s=${ep.season_number}&e=${ep.episode_number}`;
 });
 
+const filteredSeasons = computed(() =>
+  props.seasons.filter(
+    (season) => season?.season_number && season.season_number !== 0
+  )
+);
+
+const calculateRetryDelay = (retryCount) => {
+  const baseDelay = 1000;
+  const jitter = Math.random() * 500;
+  return baseDelay * Math.pow(2, retryCount) + jitter;
+};
+
+const maxRetries = 3;
+
 const fetchSeasonEpisodes = async (seasonNumber, retryCount = 0) => {
+  if (loadingSeasons.value.has(seasonNumber)) return;
+
   loadingSeasons.value.add(seasonNumber);
 
   try {
     const url = `${TMDB_SERIES_DETAILS}/${props.seriesId}/season/${seasonNumber}`;
     const data = await store.fetchSeasonEpisodes(url);
 
-    if (data && data.episodes) {
-      seasonEpisodes.value[seasonNumber] = data.episodes;
-      failedSeasons.value.delete(seasonNumber);
-    } else {
-      throw new Error('No episodes data');
-    }
+    if (!data?.episodes) throw new Error('No episodes data');
+    failedSeasons.value.delete(seasonNumber);
   } catch (error) {
+    if (!failedSeasons.value.has(seasonNumber)) {
+      toast.error('Failed to load episodes. Please try again later.');
+    }
     failedSeasons.value.add(seasonNumber);
+
+    if (retryCount < maxRetries) {
+      await new Promise((res) => setTimeout(res, calculateRetryDelay(retryCount)));
+      return fetchSeasonEpisodes(seasonNumber, retryCount + 1);
+    }
   } finally {
     loadingSeasons.value.delete(seasonNumber);
   }
+};
 
-  if (failedSeasons.value.has(seasonNumber) && retryCount < maxRetries) {
-    await new Promise(resolve => setTimeout(resolve, 5000));
-    return fetchSeasonEpisodes(seasonNumber, retryCount + 1);
+const toggleSeason = async (seasonNumber) => {
+  if (expandedSeasons.value.has(seasonNumber)) {
+    expandedSeasons.value.delete(seasonNumber);
+  } else {
+    expandedSeasons.value.add(seasonNumber);
+    if (!seasonEpisodes.value[seasonNumber]) {
+      await fetchSeasonEpisodes(seasonNumber);
+    }
   }
 };
-
-
-const fetchAllSeasonEpisodes = async () => {
-  loading.value = true;
-
-  const fetchPromises = filteredSeasons.value.map(season =>
-    fetchSeasonEpisodes(season.season_number)
-  );
-
-  await Promise.all(fetchPromises);
-
-  loading.value = false;
-};
-
 
 const getEpisodeImage = (episode) => {
   if (episode.still_path) {
     return TMDB_IMAGE + episode.still_path;
   }
-  const fallback = store.seriesDetails?.backdrop_path ?? store.seriesDetails?.poster_path;
+
+  const fallback =
+    store.seriesDetails?.backdrop_path || store.seriesDetails?.poster_path;
   return fallback ? TMDB_IMAGE + fallback : '/fallback.jpg';
 };
 
 const openModal = (episode) => {
   selectedEpisode.value = episode;
-  videoUrl.value = `${STREAM_URL}?video_id=${props.seriesId}&tmdb=1&s=${episode.season_number}&e=${episode.episode_number}`;
   showModal.value = true;
 };
-
-onMounted(fetchAllSeasonEpisodes);
 </script>
 
 <template>
   <section class="episodes container">
-    <div class="loader-container" v-if="loading && !Object.keys(seasonEpisodes).length">
-      <div class="spinner"></div>
-    </div>
+    <div v-for="season in filteredSeasons" :key="season.id" class="season-block">
+      <div class="heading flex justify-between items-center mb-2">
+        <h2 class="heading-title">Season {{ season.season_number }}</h2>
+        <button class="toggle-btn" @click="toggleSeason(season.season_number)">
+          {{ expandedSeasons.has(season.season_number) ? 'Hide Episodes' : 'View Episodes' }}
+        </button>
+      </div>
 
-    <template v-else>
-      <div v-for="season in filteredSeasons" :key="season?.id">
-        <div class="heading">
-          <h2 class="heading-title">
-            <span>Season {{ season.season_number }}</span>
-          </h2>
-        </div>
-
+      <div v-if="expandedSeasons.has(season.season_number)">
         <div v-if="loadingSeasons.has(season.season_number)">
           <div class="spinner"></div>
         </div>
@@ -118,15 +129,17 @@ onMounted(fetchAllSeasonEpisodes);
           :modules="modules"
         >
           <swiper-slide
-            v-for="(episode, index) in seasonEpisodes[season.season_number]"
+            v-for="(episode, index) in seasonEpisodes[season.season_number] || []"
             :key="`${season.season_number}-${episode.episode_number}`"
             :class="{ 'no-margin': index === 0 }"
           >
             <div class="movie-box">
               <img
                 :src="getEpisodeImage(episode)"
-                :alt="episode.name"
+                :alt="episode.name || 'Episode Image'"
+                :title="episode.name"
                 class="movie-box-img"
+                loading="lazy"
               />
               <div class="box-text">
                 <h2 class="movie-title">{{ episode.name }}</h2>
@@ -141,7 +154,7 @@ onMounted(fetchAllSeasonEpisodes);
           </swiper-slide>
         </swiper>
       </div>
-    </template>
+    </div>
 
     <Modal v-model="showModal" :videoUrl="videoUrl">
       <iframe
@@ -158,15 +171,11 @@ onMounted(fetchAllSeasonEpisodes);
 </template>
 
 <style scoped>
-.movie-box {
-  margin-bottom: 20px;
-}
-
-.no-margin .movie-box {
-  margin-bottom: 0;
-}
-
 .spinner {
-  margin-bottom: 60px;
+  margin-bottom: 40px;
+}
+
+.heading-title {
+  color: var(--main-color);
 }
 </style>
