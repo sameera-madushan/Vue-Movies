@@ -472,4 +472,17 @@ header{
     }
 }
 
+/* Episodes */
 
+.toggle-btn {
+  padding: 6px 12px;
+  background-color: var(--container-color);
+  color: var(--text-color);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.toggle-btn:hover {
+  background-color: var(--hover-color);
+}
