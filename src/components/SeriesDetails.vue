@@ -14,27 +14,23 @@ const TMDB_SERIES_DETAILS = import.meta.env.VITE_TMDB_SERIES_DETAILS;
 const TMDB_IMAGE = import.meta.env.VITE_TMDB_IMAGE;
 
 const fetchSeriesDetails = async () => {
-
-  loading.value = true;
-
-  const fullUrl = `${TMDB_SERIES_DETAILS}/${seriesId}`;
-  await store.fetchSeriesDetails(fullUrl);
-  
-  loading.value = false;
-};
-
-const scrollToEpisodes = () => {
-  if (episodesSection.value) {
-    episodesSection.value.$el.scrollIntoView({ behavior: 'smooth' });
+  try {
+    loading.value = true;
+    const fullUrl = `${TMDB_SERIES_DETAILS}/${seriesId}`;
+    await store.fetchSeriesDetails(fullUrl);
+  } finally {
+    loading.value = false;
   }
 };
 
-onMounted(fetchSeriesDetails);
+const scrollToEpisodes = () => {
+  episodesSection.value?.scrollIntoView({ behavior: 'smooth' });
+};
 
+onMounted(fetchSeriesDetails);
 </script>
 
 <template>
-
   <div v-if="loading" class="loader-container">
     <div class="spinner"></div>
   </div>
@@ -45,6 +41,7 @@ onMounted(fetchSeriesDetails);
         :src="TMDB_IMAGE + (store.seriesDetails.backdrop_path ?? store.seriesDetails.poster_path)"
         :alt="store.seriesDetails.name"
         class="home-img"
+        loading="lazy"
       />
       <div class="home-text">
         <h1 class="home-title">{{ store.seriesDetails.name }}</h1>
@@ -57,11 +54,11 @@ onMounted(fetchSeriesDetails);
     </template>
   </section>
 
-  <Episodes
-    v-if="store.seriesDetails"
-    :seriesId="seriesId"
-    :seasons="store.seriesDetails.seasons"
-    ref="episodesSection"
-  />
+  <div ref="episodesSection">
+    <Episodes
+      v-if="store.seriesDetails"
+      :seriesId="seriesId"
+      :seasons="store.seriesDetails.seasons"
+    />
+  </div>
 </template>
-
