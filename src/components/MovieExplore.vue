@@ -84,7 +84,7 @@ const openModal = (movie) => {
                 <div class="spinner"></div>
             </div>
             <div v-for="movie in store.exploreMedia" :key="movie.id" class="movie-box">
-                <img :src="TMDB_IMAGE + movie.poster_path" :alt="movie.original_title" class="movie-box-img">
+                <img :src="TMDB_IMAGE + movie.poster_path" :alt="movie.original_title" class="movie-box-img" loading="lazy">
                 <div class="box-text">
                     <h2 class="movie-title">{{ movie.original_title }}</h2>
                     <span class="movie-date">{{ movie.release_date }}</span>

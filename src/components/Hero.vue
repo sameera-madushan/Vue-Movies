@@ -56,7 +56,7 @@ const openModal = (movie) => {
             }">
             <swiper-slide v-for="movie in store.heroImages" :key="movie.id">
                 <section class="hero container" id="home">
-                    <img :src="TMDB_IMAGE + movie.backdrop_path" :alt="movie.original_title" class="home-img">
+                    <img :src="TMDB_IMAGE + movie.backdrop_path" :alt="movie.original_title" class="home-img" loading="lazy">
                     <div class="home-text">
                         <h1 class="home-title">
                             {{ movie.original_title }}

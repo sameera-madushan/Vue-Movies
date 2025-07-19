@@ -79,7 +79,7 @@ const goToSeries = (series) => {
                 <div class="spinner"></div>
             </div>
             <div v-for="series in store.exploreMedia" :key="series.id" class="movie-box">
-                <img :src="TMDB_IMAGE + series.poster_path" :alt="series.original_name" class="movie-box-img">
+                <img :src="TMDB_IMAGE + series.poster_path" :alt="series.original_name" class="movie-box-img" loading="lazy">
                 <div class="box-text">
                     <h2 class="movie-title">{{ series.original_name }}</h2>
                     <span class="movie-date">{{ series.first_air_date }}</span>

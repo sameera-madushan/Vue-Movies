@@ -62,7 +62,7 @@ const openModal = (movie) => {
                 >
                 <swiper-slide v-for="movie in store.heroImages" :key="movie.id">
                     <div class="movie-box">
-                        <img :src="TMDB_IMAGE + movie.poster_path" :alt="movie.original_title" class="movie-box-img">
+                        <img :src="TMDB_IMAGE + movie.poster_path" :alt="movie.original_title" class="movie-box-img" loading="lazy">
                         <div class="box-text">
                             <h2 class="movie-title">{{ movie.original_title }}</h2>
                             <span class="movie-date">{{ 'Release Date: ' +  movie.release_date }}</span>
