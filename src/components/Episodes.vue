@@ -1,10 +1,9 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, nextTick } from 'vue';
 import { toast } from 'vue3-toastify';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import { Autoplay, Navigation } from 'swiper/modules';
 import { useStore } from '@/store/store.js';
-import Modal from '@/components/Modal.vue';
 
 const props = defineProps({
   seriesId: Number,
@@ -12,12 +11,12 @@ const props = defineProps({
 });
 
 const store = useStore();
+const topPlayer = ref(null);
 
 const loadingSeasons = ref(new Set());
 const expandedSeasons = ref(new Set());
 const failedSeasons = ref(new Set());
 const selectedEpisode = ref(null);
-const showModal = ref(false);
 
 const TMDB_IMAGE = import.meta.env.VITE_TMDB_IMAGE;
 const STREAM_URL = import.meta.env.VITE_STREAM_URL;
@@ -91,17 +90,28 @@ const getEpisodeImage = (episode) => {
 
   const fallback =
     store.seriesDetails?.backdrop_path || store.seriesDetails?.poster_path;
-  return fallback ? TMDB_IMAGE + fallback : '/fallback.jpg';
+    return fallback ? TMDB_IMAGE + fallback : '/fallback.jpg';
 };
 
-const openModal = (episode) => {
+const selectEpisode = async (episode) => {
   selectedEpisode.value = episode;
-  showModal.value = true;
+  await nextTick();
+  topPlayer.value?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 };
 </script>
 
 <template>
   <section class="episodes container">
+    <div v-if="selectedEpisode" ref="topPlayer" class="video-wrapper">
+      <iframe
+        :src="videoUrl"
+        frameborder="0"
+        allow="autoplay; encrypted-media"
+        allowfullscreen
+        class="video-iframe"
+      ></iframe>
+    </div>
+
     <div v-for="season in filteredSeasons" :key="season.id" class="season-block">
       <div class="heading flex justify-between items-center mb-2">
         <h2 class="heading-title">Season {{ season.season_number }}</h2>
@@ -146,7 +156,7 @@ const openModal = (episode) => {
                 <span class="movie-date">
                   Episode {{ episode.episode_number }} • {{ episode.air_date }}
                 </span>
-                <a href="#" @click.prevent="openModal(episode)" class="watch-btn play-btn">
+                <a href="#" @click.prevent="selectEpisode(episode)" class="watch-btn play-btn">
                   <i class="bx bx-right-arrow animate"></i>
                 </a>
               </div>
@@ -155,27 +165,32 @@ const openModal = (episode) => {
         </swiper>
       </div>
     </div>
-
-    <Modal v-model="showModal" :videoUrl="videoUrl">
-      <iframe
-        v-if="videoUrl"
-        :src="videoUrl"
-        width="100%"
-        height="400"
-        frameborder="0"
-        allow="autoplay; encrypted-media"
-        allowfullscreen
-      ></iframe>
-    </Modal>
   </section>
 </template>
 
 <style scoped>
-.spinner {
-  margin-bottom: 40px;
-}
+  .spinner {
+    margin-bottom: 40px;
+  }
 
-.heading-title {
-  color: var(--main-color);
-}
+  .heading-title {
+    color: var(--main-color);
+  }
+
+  .video-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 40px;
+  }
+
+  .video-iframe {
+    width: 100%;
+    max-width: 80rem;
+    height: 500px;
+    border-radius: 10px;
+    border: none;
+    background: #000;
+  }
 </style>
