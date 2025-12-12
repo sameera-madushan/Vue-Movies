@@ -50,7 +50,7 @@ onMounted(() => {
 const openModal = (media) => {
     if (media.media_type === 'movie') {
         selectedMovie.value = media;
-        videoUrl.value = `${STREAM_URL}?video_id=${media.id}&tmdb=1`;
+        videoUrl.value = `${STREAM_URL}/movie/${media.id}`;
         showModal.value = true;
     } else if (media.media_type === 'tv') {
         goToSeries(media);

@@ -17,7 +17,7 @@ const STREAM_URL = import.meta.env.VITE_STREAM_URL
 
 const openModal = (movie) => {
     selectedMovie.value = movie;
-    videoUrl.value = `${STREAM_URL}?video_id=${movie.id}&tmdb=1`;
+    videoUrl.value = `${STREAM_URL}/movie/${movie.id}`;
     showModal.value = true;
 };
 </script>

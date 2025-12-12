@@ -30,7 +30,7 @@ const seasonEpisodes = computed(() => store.seasonEpisodes);
 const videoUrl = computed(() => {
   const ep = selectedEpisode.value;
   if (!ep) return '';
-  return `${STREAM_URL}?video_id=${props.seriesId}&tmdb=1&s=${ep.season_number}&e=${ep.episode_number}`;
+  return `${STREAM_URL}/tv/${props.seriesId}/${ep.season_number}/${ep.episode_number}`;
 });
 
 const filteredSeasons = computed(() =>
