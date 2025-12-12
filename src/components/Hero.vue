@@ -3,18 +3,15 @@ import {onMounted, ref} from 'vue';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import { useStore } from '@/store/store.js';
 import { Autoplay } from 'swiper/modules';
-import Modal from '@/components/Modal.vue';
+import { useRouter } from 'vue-router';
 
-const showModal = ref(false);
-const selectedMovie = ref(null);
-const videoUrl = ref('');
+const router = useRouter()
 const loading = ref(true);
 
 const store = useStore();
 const modules = [Autoplay];
 
 const randomNumber = Math.floor(Math.random() * 5) + 1;
-const STREAM_URL = import.meta.env.VITE_STREAM_URL
 const TMDB_POPULAR = import.meta.env.VITE_TMDB_POPULAR
 const TMDB_IMAGE = import.meta.env.VITE_TMDB_IMAGE
 
@@ -30,12 +27,9 @@ onMounted(() => {
     });
 });
 
-const openModal = (movie) => {
-    selectedMovie.value = movie;
-    videoUrl.value = `${STREAM_URL}/movie/${movie.id}`;
-    showModal.value = true;
+const goToMovie = (movie) => {
+    router.push({ name: 'moviedetails', params: { id: movie.id } });
 };
-
 </script>
 
 
@@ -62,7 +56,7 @@ const openModal = (movie) => {
                             {{ movie.original_title }}
                         </h1>
                         <p>{{ movie.overview }}</p>
-                        <a href="#" @click.prevent="openModal(movie)" class="watch-btn">
+                        <a href="#" @click.prevent="goToMovie(movie)" class="watch-btn">
                             <i class='bx bx-right-arrow animate'></i>
                             <span>WATCH NOW</span>
                         </a>
@@ -71,16 +65,4 @@ const openModal = (movie) => {
             </swiper-slide>
         </swiper>
     </div>
-
-    <Modal v-model="showModal" :videoUrl="videoUrl">
-        <iframe
-            v-if="videoUrl"
-            :src="videoUrl"
-            width="100%"
-            height="400"
-            frameborder="0"
-            allow="autoplay; encrypted-media"
-            allowfullscreen
-        ></iframe>
-    </Modal>
 </template>
