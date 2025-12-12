@@ -20,7 +20,7 @@ const goToSearch = (event) => {
             </router-link>
 
             <div class="search-box">
-                <input v-model="inputQuery" type="search" name="" id="search-input" placeholder="Search a movie">
+                <input v-model="inputQuery" type="search" name="" id="search-input" placeholder="Search a movie or tv show">
                 <a @click="goToSearch($event)">
                     <i class='bx bx-search'></i>
                 </a>
