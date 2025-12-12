@@ -8,6 +8,7 @@ export const useStore = defineStore({
     heroImages: [],
     exploreMedia: [],
     searchMovies: [],
+    movieDetails: null,
     seriesDetails: null,
     seasonEpisodes: {},
   }),
@@ -52,6 +53,20 @@ export const useStore = defineStore({
         return null;
       }
     },
+    async fetchMovieDetails(fullUrl) {
+      this.clearMovieData();
+      try {
+        const data = await API_GET.fetchRaw(fullUrl);
+        if (data) {
+          this.movieDetails = data;
+        }
+        return data;
+      } catch {
+        toast.error('An error occurred while fetching data. Please try again later.');
+        this.movieDetails = null;
+        return null;
+      }
+    },
 
     async fetchSeasonEpisodes(fullUrl) {
       try {
@@ -81,6 +96,10 @@ export const useStore = defineStore({
     clearSeriesData() {
       this.seriesDetails = null;
       this.seasonEpisodes = {};
+    },
+
+    clearMovieData() {
+      this.movieDetails = null;
     }
   }
 });
