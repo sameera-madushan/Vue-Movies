@@ -4,6 +4,7 @@ import MovieView from '../views/MovieView.vue'
 import SearchView from '../views/SearchView.vue'
 import SeriesView from '../views/SeriesView.vue'
 import SeriesDetailsView from '../views/SeriesDetailsView.vue'
+import MovieDetailsView from '../views/MovieDetailsView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -17,6 +18,11 @@ const router = createRouter({
       path: '/movies',
       name: 'movies',
       component: MovieView
+    },
+    {
+      path: '/movies/:id',
+      name: 'moviedetails',
+      component: MovieDetailsView
     },
     {
       path: '/tv',
